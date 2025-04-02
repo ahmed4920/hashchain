@@ -3,7 +3,6 @@ import os
 import heapq
 
 def calculate_file_hash(filepath, hash_algorithm='sha1'):
-    """Calculates the hash of a file."""
     try:
         with open(filepath, 'rb') as f:
             if hash_algorithm == 'md5':
@@ -17,10 +16,9 @@ def calculate_file_hash(filepath, hash_algorithm='sha1'):
                 hasher.update(chunk)
             return hasher.hexdigest()
     except FileNotFoundError:
-        return None  # Handle file not found
+        return None  
 
 def calculate_top_hash(file_paths, hash_algorithm='sha1'):
-    """Calculates the combined hash of all file hashes."""
     file_hashes = []
     for filepath in file_paths:
         file_hash = calculate_file_hash(filepath, hash_algorithm)
@@ -28,9 +26,9 @@ def calculate_top_hash(file_paths, hash_algorithm='sha1'):
             file_hashes.append(file_hash)
 
     if not file_hashes:
-        return None  # Return None if no valid file hashes are found.
+        return None  
 
-    combined_hash_input = ''.join(sorted(file_hashes)).encode('utf-8')  # Sort for consistency
+    combined_hash_input = ''.join(sorted(file_hashes)).encode('utf-8')  
 
     if hash_algorithm == 'md5':
         combined_hasher = hashlib.md5(combined_hash_input)
@@ -42,7 +40,6 @@ def calculate_top_hash(file_paths, hash_algorithm='sha1'):
     return combined_hasher.hexdigest()
 
 def modify_file(filepath, content_to_add="Modified content"):
-    """Modifies a file by appending content."""
     try:
         with open(filepath, 'a') as f:
             f.write(content_to_add)
@@ -50,7 +47,6 @@ def modify_file(filepath, content_to_add="Modified content"):
         print(f"File not found: {filepath}")
 
 def main(file_paths):
-    """Main function to calculate and demonstrate Top Hash."""
     original_top_hash = calculate_top_hash(file_paths)
 
     if original_top_hash is None:
@@ -59,7 +55,6 @@ def main(file_paths):
 
     print(f"Original Top Hash: {original_top_hash}")
 
-    # Modify one file
     if file_paths:
         modify_file(file_paths[0])
 
@@ -72,7 +67,6 @@ def main(file_paths):
         print("Top Hash does not match (modification detected).")
 
 if __name__ == "__main__":
-    # Create sample files for testing
     file_paths = ["L1.txt", "L2.txt", "L3.txt", "L4.txt"]
     for filepath in file_paths:
         with open(filepath, 'w') as f:
@@ -80,7 +74,6 @@ if __name__ == "__main__":
 
     main(file_paths)
 
-    #Cleanup the test files
     for filepath in file_paths:
       try:
         os.remove(filepath)
